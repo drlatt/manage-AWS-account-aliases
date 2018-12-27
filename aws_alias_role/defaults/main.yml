@@ -1,0 +1,4 @@
+aws_account_alias: ""
+aws_account_state: "present"
+aws_access_key: ""
+aws_secret_key: ""

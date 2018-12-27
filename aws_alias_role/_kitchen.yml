@@ -1,0 +1,56 @@
+---
+driver                    :
+    name                  : docker
+    socket                : unix:///var/run/docker.sock
+    use_sudo              : false
+
+provisioner:
+    name                  : ansible_push
+    verbose               : "vvvv"
+    chef_bootstrap_url    : nil
+    ansible_config        : "test/ansible.cfg"
+    idempotency_test      : True
+    diff                  : True
+
+verifier:
+  name: serverspec
+  remote_exec             : false
+  default_pattern         : true
+
+
+platforms:
+ - name                   : ubuntu1604
+   driver_config          :
+     image                : ubuntu:xenial
+     platform             : ubuntu
+     provision_command    :
+                            - apt-get update
+                            - apt-get -qy install python-minimal
+                            - apt-get -qy install python-pip
+                            - pip install boto3==1.7.28
+                            - pip install botocore==1.10.28
+
+
+   provisioner            :
+     ansible_playbook_bin : "ansible-playbook"
+
+suites                      :
+    - name                  : test_create_alias
+      provisioner           :
+          playbook          : "test/integration/test_create_alias/test_create_alias.yml"
+
+    - name                  : create_existing_alias
+      provisioner           :
+          playbook          : "test/integration/create_existing_alias/create_existing_alias.yml"
+
+    - name                  : test_change_alias
+      provisioner           :
+          playbook          : "test/integration/test_change_alias/test_change_alias.yml"
+
+    - name                  : test_delete_nonalias
+      provisioner           :
+          playbook          : "test/integration/test_delete_nonalias/test_delete_nonalias.yml"
+
+    - name                  : test_delete_alias
+      provisioner           :
+          playbook          : "test/integration/test_delete_alias/test_delete_alias.yml"

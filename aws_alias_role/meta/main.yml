@@ -1,0 +1,8 @@
+galaxy_info:
+  author: Lateef Koshemani
+  description: A role to change AWS account alias
+  min_ansible_version:
+  platforms:
+    - name: Ubuntu
+      versions:
+        xenial
